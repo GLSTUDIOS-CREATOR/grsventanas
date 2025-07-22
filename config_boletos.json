@@ -1,0 +1,12 @@
+{
+  "per_cell_offsets": {
+    "0": {"grid_x": -20, "grid_y": 28, "info_x": 100, "info_y": 50, "rein_x": 10, "rein_y": 50},
+    "1": {"grid_x": -55, "grid_y": 28, "info_x": 70,  "info_y": 50, "rein_x": -30,"rein_y": 50},
+    "2": {"grid_x": -20, "grid_y": 80, "info_x": 100, "info_y": 90, "rein_x": 10, "rein_y": 10},
+    "3": {"grid_x": -55, "grid_y": 80, "info_x": 70,  "info_y": 90, "rein_x": -30,"rein_y": 10},
+    "4": {"grid_x": -20, "grid_y":130, "info_x": 100, "info_y":140, "rein_x": 10, "rein_y": -40},
+    "5": {"grid_x": -55, "grid_y":130, "info_x": 70,  "info_y":140, "rein_x": -30,"rein_y": -40},
+    "6": {"grid_x": -20, "grid_y":175, "info_x": 100, "info_y":190, "rein_x": 10, "rein_y": -90},
+    "7": {"grid_x": -55, "grid_y":175, "info_x": 70,  "info_y":190, "rein_x": -30,"rein_y": -90}
+  }
+}

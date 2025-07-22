@@ -1,0 +1,38 @@
+{
+  "OPERADOR1": {
+    "clave": "solo123",
+    "rol": "operador",
+    "permisos": [
+      "jugar"
+    ],
+    "sexo": "masculino",
+    "avatar": "avatar-male.png"
+  },
+  "GLSTUDIOS": {
+    "clave": "LiamLara..2912",
+    "rol": "superadmin",
+    "permisos": [
+      "juego",
+      "sorteos",
+      "contabilidad",
+      "vendedores",
+      "admin_usuarios",
+      "vmix",
+      "graficos",
+      "movimientos"
+    ],
+    "sexo": "masculino",
+    "avatar": "avatar-male.png"
+  },
+  "MMARITZA": {
+    "clave": "MegaSuerte",
+    "rol": "admin",
+    "sexo": "femenino",
+    "avatar": "avatar-female.png",
+    "permisos": [
+      "sorteos",
+      "contabilidad",
+      "vendedores"
+    ]
+  }
+}

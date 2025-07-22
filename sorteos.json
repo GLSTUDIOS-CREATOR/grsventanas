@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "nombre": "ac",
+    "fecha": "2025-06-07",
+    "tipo": "",
+    "serie_inicial": "",
+    "serie_final": "",
+    "vendedores": [],
+    "reintegro": "",
+    "estado": "activo",
+    "observaciones": "",
+    "codigo": "2025-07-060001"
+  }
+]
