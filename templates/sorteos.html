@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% block title %}Sorteos{% endblock %}
+{% block content %}
+  <h1 class="text-2xl font-bold mb-4">Gestión de Sorteos</h1>
+
+  <a href="{{ url_for('nuevo_sorteo') }}" class="btn btn-primary mb-4">+ Nuevo Sorteo</a>
+
+  <table class="min-w-full bg-white border">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2">Código</th>
+        <th class="px-4 py-2">Nombre</th>
+        <th class="px-4 py-2">Fecha</th>
+        <th class="px-4 py-2">Premio</th>
+        <th class="px-4 py-2">Plantilla</th>
+        <th class="px-4 py-2">Activo</th>
+        <th class="px-4 py-2">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sorteos %}
+      <tr class="border-t">
+        <td class="px-4 py-2">{{ s.codigo }}</td>
+        <td class="px-4 py-2">{{ s.nombre }}</td>
+        <td class="px-4 py-2">{{ s.fecha_evento.strftime('%d/%m/%Y') }}</td>
+        <td class="px-4 py-2">${{ '{:,.2f}'.format(s.premio_gordo) }}</td>
+        <td class="px-4 py-2">{{ s.plantilla or '—' }}</td>
+        <td class="px-4 py-2 text-center">
+          {% if s.activo %}
+            ✅
+          {% else %}
+            ❌
+          {% endif %}
+        </td>
+        <td class="px-4 py-2 space-x-2">
+          <a href="{{ url_for('editar_sorteo', sorteo_id=s.id) }}" class="btn btn-sm btn-outline">✏️</a>
+          <form method="post" action="{{ url_for('eliminar_sorteo', sorteo_id=s.id) }}" class="inline-block" onsubmit="return confirm('¿Eliminar este sorteo?');">
+            <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+          </form>
+          <form method="post" action="{{ url_for('activar_sorteo', sorteo_id=s.id) }}" class="inline-block">
+            <button type="submit" class="btn btn-sm btn-success">⚡</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7" class="px-4 py-2 text-center">No hay sorteos aún.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

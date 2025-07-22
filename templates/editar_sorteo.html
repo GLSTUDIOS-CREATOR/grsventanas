@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}Editar Sorteo{% endblock %}
+{% block content %}
+  <h1 class="text-2xl font-bold mb-4">Editar Sorteo</h1>
+  <form method="post" class="space-y-4 max-w-md">
+    <div>
+      <label class="block">Código</label>
+      <input name="codigo" value="{{ sorteo.codigo }}" required class="w-full border px-2 py-1" />
+    </div>
+    <div>
+      <label class="block">Nombre</label>
+      <input name="nombre" value="{{ sorteo.nombre }}" required class="w-full border px-2 py-1" />
+    </div>
+    <div>
+      <label class="block">Fecha del Evento</label>
+      <input type="date" name="fecha_evento" value="{{ sorteo.fecha_evento.isoformat() }}" required class="w-full border px-2 py-1" />
+    </div>
+    <div>
+      <label class="block">Premio Gordo</label>
+      <input type="number" step="0.01" name="premio_gordo" value="{{ sorteo.premio_gordo }}" required class="w-full border px-2 py-1" />
+    </div>
+    <div>
+      <label class="block">Plantilla (opcional)</label>
+      <input name="plantilla" value="{{ sorteo.plantilla or '' }}" class="w-full border px-2 py-1" />
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <a href="{{ url_for('vista_sorteos') }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+{% endblock %}

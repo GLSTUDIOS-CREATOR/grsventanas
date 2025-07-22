@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Usuario | GLBingo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900;700;500;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f7faff 0%, #d2e8ff 100%);
+            font-family: 'Montserrat', Arial, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 75px;
+            position: relative;
+            z-index: 2;
+        }
+        .register-card {
+            background: #fff;
+            border-radius: 22px;
+            padding: 46px 44px 34px 44px;
+            box-shadow: 0 9px 40px #b0d6ff70;
+            text-align: center;
+            min-width: 360px;
+        }
+        .register-card h2 {
+            color: #0a377f;
+            font-size: 2.05em;
+            margin: 0 0 17px 0;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+        .form-input {
+            width: 100%;
+            margin-bottom: 14px;
+            padding: 13px 14px;
+            border: 1.6px solid #e0eaff;
+            border-radius: 8px;
+            font-size: 1.05em;
+            background: #f8fbff;
+        }
+        .register-btn {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(90deg, #227be6 30%, #30bdf6 100%);
+            color: #fff;
+            font-size: 1.13em;
+            border: none;
+            border-radius: 9px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .register-btn:hover {
+            background: linear-gradient(90deg, #135db2 10%, #0bc8ee 90%);
+        }
+        .alert {
+            color: #d32f2f;
+            background: #fff5f5;
+            padding: 10px 14px;
+            margin-bottom: 17px;
+            border-radius: 7px;
+            text-align: center;
+            font-size: 1em;
+            border: 1.2px solid #ffdadb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="register-card">
+            <h2>Registrar Nuevo Usuario</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="alert">
+                  {{ messages[0][1] }}
+                </div>
+              {% endif %}
+            {% endwith %}
+            <form method="POST">
+                <input type="text" name="usuario" class="form-input" placeholder="Nuevo usuario" required>
+                <input type="password" name="clave" class="form-input" placeholder="Clave" required>
+                <select name="rol" class="form-input" required>
+                    <option value="usuario">Usuario común</option>
+                    <option value="vendedor">Vendedor</option>
+                    <option value="supervisor">Supervisor</option>
+                    <option value="admin">Administrador</option>
+                </select>
+                <button type="submit" class="register-btn">Registrar</button>
+            </form>
+            <a href="{{ url_for('dashboard') }}" style="margin-top:14px;display:block;color:#247bf7;font-weight:500;">Volver al dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

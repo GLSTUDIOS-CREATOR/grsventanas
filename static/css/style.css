@@ -1,0 +1,102 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+  --primary-color: #1E3A8A;       /* Deep Indigo */
+  --secondary-color: #F59E0B;     /* Amber Accent */
+  --bg-light: #F3F4F6;            /* Light Gray Background */
+  --sidebar-bg: #111827;          /* Dark Gray Sidebar */
+  --text-color: #374151;          /* Dark Gray Text */
+  --card-bg: #FFFFFF;             /* White Cards */
+  --border-radius: 0.75rem;       /* 12px Rounded Corners */
+  --transition-speed: 0.3s;       /* Smooth Transitions */
+}
+
+/* Global Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* Sidebar Styles */
+#sidebar {
+  background: var(--sidebar-bg);
+}
+#sidebar .nav-link {
+  color: #D1D5DB;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  transition: background var(--transition-speed), color var(--transition-speed);
+}
+#sidebar .nav-link:hover,
+#sidebar .nav-link.active {
+  background: var(--primary-color);
+  color: #FFFFFF;
+}
+
+/* Logo / Brand */
+#sidebar a.d-flex {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* Topbar */
+.navbar-light {
+  background: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+}
+.card .card-subtitle {
+  font-weight: 600;
+  color: var(--text-color);
+}
+.card .card-title {
+  font-weight: 700;
+}
+
+/* Card Icons */
+.card i.bi {
+  font-size: 1.75rem;
+}
+
+/* Chart Section */
+.card .card-header {
+  background-color: var(--card-bg);
+  border-bottom: 1px solid #E5E7EB;
+  font-weight: 600;
+}
+
+/* Footer */
+footer {
+  font-size: 0.875rem;
+  background-color: #FFFFFF;
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+}
+
+/* Responsive Sidebar Toggle */
+@media (max-width: 768px) {
+  #sidebar {
+    position: fixed;
+    z-index: 1030;
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform var(--transition-speed);
+  }
+  #sidebar.show {
+    transform: translateX(0);
+  }
+}

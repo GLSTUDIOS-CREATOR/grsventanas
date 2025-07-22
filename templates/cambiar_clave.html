@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar clave | GLBINGO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500;400&display=swap" rel="stylesheet">
+    <style>
+        body { background: #e8f1fd; font-family: 'Montserrat', Arial, sans-serif; min-height: 100vh; display:flex;justify-content:center;align-items:center;}
+        .caja { background: #fff; border-radius: 20px; box-shadow: 0 7px 38px #a3cffe35; padding: 36px 42px; text-align: center;}
+        .avatar { width: 84px; border-radius: 50%; margin-bottom: 14px; box-shadow: 0 2px 11px #1ea7f73a;}
+        h2 { color: #1368c7; font-weight: 900; margin-bottom: 16px;}
+        form { display: flex; flex-direction: column; gap: 14px; }
+        input { padding: 11px 13px; border: 1.5px solid #aae2ff; border-radius: 7px; font-size: 1.09em;}
+        button { background: linear-gradient(90deg,#297be7 0%,#1ea7f7 100%); color:#fff; border:none; border-radius:7px; font-size:1.13em; padding:11px 0; font-weight:700; cursor:pointer;}
+        .alert { color:#e0353c;}
+    </style>
+</head>
+<body>
+    <div class="caja">
+        <img class="avatar" src="{{ url_for('static', filename=avatar) }}" alt="avatar">
+        <h2>Cambiar clave</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form method="POST">
+            <input type="password" name="actual" placeholder="Clave actual" required>
+            <input type="password" name="nueva" placeholder="Nueva clave" required>
+            <button type="submit">Actualizar clave</button>
+        </form>
+        <br>
+        <a href="{{ url_for('dashboard') }}">Volver al dashboard</a>
+    </div>
+</body>
+</html>

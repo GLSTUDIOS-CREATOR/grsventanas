@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Historial de Sorteos | GLBINGO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900;700;600;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body { font-family: 'Montserrat', Arial, sans-serif; background: #f7fafd; margin:0; }
+    .historial-contenedor {
+      max-width: 1100px; margin: 44px auto; background: #fff; border-radius: 32px; box-shadow: 0 8px 38px #a6d9ff2c; padding: 28px 38px;
+    }
+    .historial-titulo { font-size: 2em; font-weight: 900; color: #1868cc; margin-bottom: 14px; display:flex; gap:10px; align-items:center;}
+    .tabla-sorteos { width: 100%; border-collapse: collapse; margin-top: 22px; }
+    .tabla-sorteos th, .tabla-sorteos td { padding: 11px 13px; border-bottom: 1.5px solid #e8effa; text-align:left; }
+    .tabla-sorteos th { background: #eef6fe; color: #1473c4; font-size: 1.08em; }
+    .tabla-sorteos tr.activo { background: #fffde6; font-weight: 900; color: #ce9a07;}
+    .tabla-sorteos tr:hover { background: #f2f8fe; }
+    .badge-estado { border-radius: 6px; font-size: .93em; font-weight: 900; padding: 3px 12px; }
+    .badge-activo { background: #ffe058; color: #c57f02;}
+    .badge-futuro { background: #d4f7e8; color: #1ea475;}
+    .badge-pasado { background: #e9ecf5; color: #6677b2;}
+    .accion-btn {
+      border:none; background: #1976d2; color:#fff; font-weight:800; padding:7px 15px; border-radius:8px; margin-right:7px;
+      cursor:pointer; transition:background 0.13s;
+    }
+    .accion-btn:hover { background: #0e3d8f; }
+    @media (max-width: 900px) {
+      .historial-contenedor { padding: 12px 2vw; }
+      .tabla-sorteos th, .tabla-sorteos td { font-size: .97em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="historial-contenedor">
+    <div class="historial-titulo"><i class="bi bi-clock-history"></i> Historial de Sorteos</div>
+    {% if activos %}
+      <h3 style="color:#c49706; margin-bottom:6px; margin-top: 26px;">Activo</h3>
+      <table class="tabla-sorteos">
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Identificador</th>
+          <th>Premios</th>
+          <th>Serie</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        {% for s in activos %}
+        <tr class="activo">
+          <td>{{ loop.index }}</td>
+          <td>{{ s.fecha }}</td>
+          <td>{{ s.identificador }}</td>
+          <td>${{ s.valor_premios }}</td>
+          <td>{{ s.serie_impresion }}</td>
+          <td><span class="badge-estado badge-activo">ACTIVO</span></td>
+          <td>
+            <a href="#" class="accion-btn"><i class="bi bi-eye"></i> Ver</a>
+            <a href="#" class="accion-btn"><i class="bi bi-pencil"></i> Editar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+    {% if futuros %}
+      <h3 style="color:#15ad7e; margin-bottom:6px; margin-top: 26px;">Futuros</h3>
+      <table class="tabla-sorteos">
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Identificador</th>
+          <th>Premios</th>
+          <th>Serie</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        {% for s in futuros %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ s.fecha }}</td>
+          <td>{{ s.identificador }}</td>
+          <td>${{ s.valor_premios }}</td>
+          <td>{{ s.serie_impresion }}</td>
+          <td><span class="badge-estado badge-futuro">FUTURO</span></td>
+          <td>
+            <a href="#" class="accion-btn"><i class="bi bi-eye"></i> Ver</a>
+            <a href="#" class="accion-btn"><i class="bi bi-pencil"></i> Editar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+    {% if pasados %}
+      <h3 style="color:#495677; margin-bottom:6px; margin-top: 26px;">Pasados</h3>
+      <table class="tabla-sorteos">
+        <tr>
+          <th>#</th>
+          <th>Fecha</th>
+          <th>Identificador</th>
+          <th>Premios</th>
+          <th>Serie</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        {% for s in pasados %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ s.fecha }}</td>
+          <td>{{ s.identificador }}</td>
+          <td>${{ s.valor_premios }}</td>
+          <td>{{ s.serie_impresion }}</td>
+          <td><span class="badge-estado badge-pasado">PASADO</span></td>
+          <td>
+            <a href="#" class="accion-btn"><i class="bi bi-eye"></i> Ver</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+    {% if not activos and not futuros and not pasados %}
+      <div style="margin:44px 0; color:#b8bfd4; font-size:1.22em; text-align:center;"><i class="bi bi-info-circle"></i> No hay sorteos registrados.</div>
+    {% endif %}
+  </div>
+</body>
+</html>

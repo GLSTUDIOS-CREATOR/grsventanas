@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Vendedores | GLBINGO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;700;600;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body { background: linear-gradient(120deg, #e0eaff 0%, #eaf6ff 100%); font-family: 'Montserrat', Arial, sans-serif; min-height: 100vh; margin: 0;}
+    .main-box {
+      max-width: 560px;
+      margin: 32px auto 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 7px 32px #1ea7f72e;
+      padding: 32px 20px 20px 20px;
+    }
+    .logo-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0 5px 0;
+    }
+    .logo-bar img {
+      height: 68px;
+      border-radius: 17px;
+      background: #fff;
+      box-shadow: 0 2px 10px #b1d8ff40;
+      margin-right: 8px;
+    }
+    .btn-back {
+      background: #fff;
+      border: 2px solid #1ea7f7;
+      color: #1ea7f7;
+      border-radius: 11px;
+      padding: 8px 22px;
+      font-weight: 700;
+      font-size: 1em;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background .16s, color .16s;
+      text-decoration: none;
+    }
+    .btn-back:hover {
+      background: #1ea7f7;
+      color: #fff;
+    }
+    .header-title {
+      text-align: center;
+      font-size: 2em;
+      color: #1366d6;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 27px;
+    }
+    .form-vendedor {
+      display: flex;
+      gap: 9px;
+      margin-bottom: 21px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .form-vendedor input {
+      font-size: 1em;
+      border-radius: 7px;
+      border: 1.3px solid #e1e9f3;
+      padding: 7px 12px;
+      background: #f6faff;
+      margin-right: 8px;
+    }
+    .btn-azul {
+      background: linear-gradient(90deg,#267dff 0%,#3ba6ff 100%);
+      color: #fff; font-weight: 800; font-size: 1.07em;
+      border: none; border-radius: 9px;
+      padding: 8px 22px; margin-top: 0; cursor: pointer;
+      box-shadow: 0 3px 11px #267dff18;
+      transition: background .14s;
+    }
+    .btn-azul:hover { background: linear-gradient(90deg,#3ba6ff 0%,#267dff 100%);}
+    .tabla-vendedores {
+      width: 100%;
+      border-collapse: collapse;
+      background: #f8faff;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 9px;
+    }
+    .tabla-vendedores th, .tabla-vendedores td {
+      padding: 11px 7px;
+      font-size: 1em;
+      border-bottom: 1px solid #eef1f8;
+    }
+    .tabla-vendedores th {
+      background: #eaf2fd;
+      color: #227ae6;
+      font-weight: 800;
+    }
+    .tabla-vendedores tr:last-child td {
+      border-bottom: none;
+    }
+    .tabla-vendedores td {
+      color: #1a2c4e;
+      font-weight: 600;
+    }
+    .btn-edit, .btn-del {
+      border: none;
+      border-radius: 7px;
+      padding: 4px 16px;
+      font-size: 1em;
+      font-weight: 700;
+      margin: 0 3px;
+      cursor: pointer;
+      transition: background .12s;
+    }
+    .btn-edit {
+      background: #e7f1ff;
+      color: #2171d6;
+    }
+    .btn-edit:hover { background: #b1dfff;}
+    .btn-del {
+      background: #fff2f2;
+      color: #db4848;
+    }
+    .btn-del:hover { background: #ffcdcd;}
+    @media (max-width: 600px) {
+      .main-box { padding: 14px 2vw;}
+      .header-title { font-size: 1.3em;}
+      .tabla-vendedores th, .tabla-vendedores td {padding: 7px 2px; font-size: .97em;}
+      .form-vendedor { flex-direction: column; gap: 4px;}
+      .logo-bar img { height: 48px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="main-box">
+    <div class="logo-bar">
+      <img src="{{ url_for('static', filename='logo-glstudios.png') }}" alt="Logo GL Studios">
+      <a href="{{ url_for('dashboard') }}" class="btn-back"><i class="bi bi-arrow-left"></i> Volver al Dashboard</a>
+    </div>
+    <div class="header-title">Gestión de Vendedores</div>
+    <form id="formVendedor" class="form-vendedor" autocomplete="off">
+      <div style="flex:1;">
+        <label>Nombre</label>
+        <input type="text" id="nombreVendedor" maxlength="40" required>
+      </div>
+      <div style="flex:1;">
+        <label>Seudónimo</label>
+        <input type="text" id="seudonimoVendedor" maxlength="40" required>
+      </div>
+      <button type="submit" class="btn-azul" id="btnAddVendedor"><i class="bi bi-person-plus"></i> Guardar</button>
+    </form>
+    <table class="tabla-vendedores">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Seudónimo</th>
+          <th style="width:125px;">Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tablaVendedores">
+        {% for nombre, info in vendedores.items() %}
+        <tr>
+          <td>{{ nombre }}</td>
+          <td>{{ info['seudonimo'] }}</td>
+          <td>
+            <button class="btn-edit" onclick="editarVendedor('{{ nombre }}', '{{ info['seudonimo'] }}')"><i class="bi bi-pencil-square"></i> Editar</button>
+            <button class="btn-del" onclick="eliminarVendedor('{{ nombre }}')"><i class="bi bi-trash"></i> Eliminar</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <script>
+    let editando = null;
+    function limpiarForm() {
+      document.getElementById('nombreVendedor').value = '';
+      document.getElementById('seudonimoVendedor').value = '';
+      editando = null;
+      document.getElementById('btnAddVendedor').innerHTML = '<i class="bi bi-person-plus"></i> Guardar';
+    }
+
+    document.getElementById('formVendedor').onsubmit = function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombreVendedor').value.trim().toUpperCase();
+      const seudonimo = document.getElementById('seudonimoVendedor').value.trim();
+      if(!nombre || !seudonimo) return;
+      if(editando) {
+        fetch('/api/editar_vendedor', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({nombre, seudonimo})
+        }).then(r=>r.json()).then(res=>{
+          if(res.ok) location.reload();
+          else alert(res.msg);
+        });
+      } else {
+        fetch('/api/crear_vendedor', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({nombre, seudonimo})
+        }).then(r=>r.json()).then(res=>{
+          if(res.ok) location.reload();
+          else alert(res.msg);
+        });
+      }
+      limpiarForm();
+    };
+    function editarVendedor(nombre, seudonimo) {
+      document.getElementById('nombreVendedor').value = nombre;
+      document.getElementById('seudonimoVendedor').value = seudonimo;
+      editando = true;
+      document.getElementById('btnAddVendedor').innerHTML = '<i class="bi bi-save"></i> Actualizar';
+    }
+    function eliminarVendedor(nombre) {
+      if(confirm('¿Eliminar este vendedor?')) {
+        fetch('/api/eliminar_vendedor', {
+          method: 'POST', headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({nombre})
+        }).then(r=>r.json()).then(res=>{
+          if(res.ok) location.reload();
+          else alert(res.msg);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

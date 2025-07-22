@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurar vMix | GLBINGO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900;700;600;500;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body { background: linear-gradient(120deg, #e0eaff 0%, #eaf6ff 100%); font-family: 'Montserrat', Arial, sans-serif; }
+        .panel { max-width: 390px; margin: 55px auto; background: #fff; border-radius: 18px; box-shadow: 0 6px 32px #1ea7f72a; padding: 32px 32px 27px 32px;}
+        .panel-logo {display:flex;justify-content:center;}
+        .panel-logo img {width:80px; border-radius:16px; margin-bottom:9px;}
+        .panel h2 { text-align: center; font-weight: 900; color: #1868e8; margin-bottom: 16px; margin-top:0; font-size:2em;}
+        .volver-btn {background:#fff;border:2px solid #207af7; color:#2170ef;font-weight:700;border-radius:8px;padding:6px 22px;margin-bottom:11px; cursor:pointer;display:inline-block;}
+        .panel label { font-weight: 700; color: #155dbe; margin-bottom: 6px; display: block;}
+        .panel input { width: 100%; padding: 11px; font-size: 1em; border-radius: 8px; border: 1.5px solid #e1e9f3; background: #f6faff; margin-bottom: 15px;}
+        .panel button[type=submit], .panel .probar-btn { width: 100%; background: linear-gradient(90deg,#267dff 0%,#3ba6ff 100%); color: #fff; font-weight: 900; font-size: 1.11em; border: none; border-radius: 8px; padding: 12px 0; margin-top:7px; cursor: pointer;}
+        .panel .probar-btn { width:auto; font-weight:700; font-size:.97em; padding:8px 24px; margin:0 0 14px 0;}
+        .panel .mensaje { text-align: center; font-weight: 700; font-size: 1em; margin: 11px 0 6px 0; border-radius: 7px; padding: 7px; display:none;}
+        .panel .mensaje.ok { color:#19a553; background: #eaffef; display:block;}
+        .panel .mensaje.error { color:#b81e19; background: #fff0f0; display:block;}
+        .panel .ip-actual {font-size:.99em;color:#207af7;font-weight:600;text-align:center;margin-bottom:10px;}
+        .probar-row {display:flex;align-items:center;gap:8px;}
+        @media (max-width:500px) {.panel{padding:10px 4vw 13px 4vw;}}
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <div class="panel-logo"><img src="{{ url_for('static', filename='logo-glstudios.png') }}"></div>
+        <button class="volver-btn" onclick="window.location.href='/dashboard'">&larr; Volver al Dashboard</button>
+        <h2>Configurar IP de vMix</h2>
+        {% if ip %}
+        <div class="ip-actual">IP actual: <span id="ipActualText">{{ ip }}</span></div>
+        {% endif %}
+        <form id="formConfigVmix" method="POST" autocomplete="off">
+            <label for="inputVmixIp">Dirección IP de vMix</label>
+            <div class="probar-row">
+                <input type="text" id="inputVmixIp" name="ip" placeholder="Ejemplo: 192.168.1.20" value="{{ ip or '' }}" required>
+                <button type="button" class="probar-btn" id="btnProbar"><i class="bi bi-wifi"></i> Probar</button>
+            </div>
+            <div class="mensaje" id="mensajeVmix"></div>
+            <button type="submit"><i class="bi bi-save"></i> Guardar</button>
+        </form>
+    </div>
+    <script>
+    // Valida formato IP simple
+    function validarIP(ip) {
+        return /^(\d{1,3}\.){3}\d{1,3}$/.test(ip);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('formConfigVmix');
+        const ipInput = document.getElementById('inputVmixIp');
+        const msgBox = document.getElementById('mensajeVmix');
+        const btnProbar = document.getElementById('btnProbar');
+
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            const ip = ipInput.value.trim();
+            msgBox.classList.remove('ok','error');
+            if (!ip || !validarIP(ip)) {
+                msgBox.textContent = "Debes ingresar una IP válida (ej: 192.168.1.20)";
+                msgBox.classList.add('error');
+                msgBox.style.display = "block";
+                return;
+            }
+            form.submit();
+        };
+
+        btnProbar.onclick = function() {
+            const ip = ipInput.value.trim();
+            msgBox.classList.remove('ok','error');
+            msgBox.style.display = "none";
+            if (!ip || !validarIP(ip)) {
+                msgBox.textContent = "IP inválida";
+                msgBox.classList.add('error');
+                msgBox.style.display = "block";
+                return;
+            }
+            btnProbar.disabled = true;
+            btnProbar.innerHTML = '<i class="bi bi-wifi"></i> Probando...';
+            fetch('/probar_vmix', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ip})
+            })
+            .then(r=>r.json())
+            .then(res=>{
+                if(res.ok){
+                    msgBox.textContent = "¡vMix responde correctamente!";
+                    msgBox.classList.add('ok');
+                } else {
+                    msgBox.textContent = "No se pudo conectar con vMix en esa IP.";
+                    msgBox.classList.add('error');
+                }
+                msgBox.style.display = "block";
+            })
+            .catch(()=> {
+                msgBox.textContent = "Error al intentar conectar.";
+                msgBox.classList.add('error');
+                msgBox.style.display = "block";
+            })
+            .finally(()=>{
+                btnProbar.disabled = false;
+                btnProbar.innerHTML = '<i class="bi bi-wifi"></i> Probar';
+            });
+        }
+    });
+    </script>
+</body>
+</html>

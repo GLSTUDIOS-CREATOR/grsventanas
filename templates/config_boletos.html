@@ -1,0 +1,40 @@
+{% extends "dashboard.html" %}
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow">
+  <h2 class="text-xl font-bold mb-4">Configuración de Boletos</h2>
+  <form method="POST">
+    {% for i in range(8) %}
+    <fieldset class="border rounded p-4 mb-4">
+      <legend class="font-semibold">Boleto {{ i+1 }} (índice {{ i }})</legend>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label>Grid X</label>
+          <input type="number" name="{{ i }}_grid_x" value="{{ cfg[i].grid_x }}" class="w-full border rounded p-2"/>
+        </div>
+        <div>
+          <label>Grid Y</label>
+          <input type="number" name="{{ i }}_grid_y" value="{{ cfg[i].grid_y }}" class="w-full border rounded p-2"/>
+        </div>
+        <div>
+          <label>Info X</label>
+          <input type="number" name="{{ i }}_info_x" value="{{ cfg[i].info_x }}" class="w-full border rounded p-2"/>
+        </div>
+        <div>
+          <label>Info Y</label>
+          <input type="number" name="{{ i }}_info_y" value="{{ cfg[i].info_y }}" class="w-full border rounded p-2"/>
+        </div>
+        <div>
+          <label>Reintegro X</label>
+          <input type="number" name="{{ i }}_rein_x" value="{{ cfg[i].rein_x }}" class="w-full border rounded p-2"/>
+        </div>
+        <div>
+          <label>Reintegro Y</label>
+          <input type="number" name="{{ i }}_rein_y" value="{{ cfg[i].rein_y }}" class="w-full border rounded p-2"/>
+        </div>
+      </div>
+    </fieldset>
+    {% endfor %}
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Guardar Configuración</button>
+  </form>
+</div>
+{% endblock %}

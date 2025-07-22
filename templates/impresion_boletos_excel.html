@@ -1,0 +1,181 @@
+{% extends "layout.html" %}
+
+{% block title %}Impresión de Boletos y Planillas{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <h2 class="mb-4">Impresión de Boletos y Planillas</h2>
+
+  <form method="POST" action="{{ url_for('impresion') }}">
+
+    <!-- ─────────────────────────── BOLETOS ─────────────────────────── -->
+    <div class="card mb-5 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <i class="bi bi-ticket-perforated-fill me-2"></i>
+        <strong>Boletos</strong>
+      </div>
+      <div class="card-body">
+        <div class="row gy-3">
+
+          <!-- Serie de archivo -->
+          <div class="col-12 col-md-4">
+            <label class="form-label">Serie de archivo</label>
+            <select name="serie_archivo" class="form-select" required>
+              <option value="">-- Seleccione serie --</option>
+              {% for f,label in series %}
+                <option value="{{ f }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Desde ID -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Desde ID</label>
+            <input type="text" name="serie_inicio" class="form-control" placeholder="Ej. 0001">
+          </div>
+
+          <!-- Hasta ID -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Hasta ID</label>
+            <input type="text" name="serie_fin" class="form-control" placeholder="Ej. 0250">
+          </div>
+
+          <!-- Valor por boleto -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Valor por boleto</label>
+            <input type="text" name="valor" class="form-control" value="1,00">
+          </div>
+
+          <!-- Fecha Sorteo -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Fecha Sorteo</label>
+            <input type="date" name="fecha_sorteo" class="form-control" value="{{ fecha_hoy }}">
+          </div>
+
+          <!-- Reintegro especial y preview -->
+          <div class="col-12 col-md-4">
+            <label class="form-label">Reintegro especial</label>
+            <select id="selectReintegro" name="reintegro_especial" class="form-select">
+              <option value="">-- Ninguno --</option>
+              {% for img in reintegros %}
+                <option value="{{ img }}">{{ img }}</option>
+              {% endfor %}
+            </select>
+            <div class="border rounded mt-2 p-2 text-center bg-light">
+              <img id="previewReintegro"
+                   src=""
+                   alt="Previsualización"
+                   class="img-fluid"
+                   style="max-height: 80px;">
+            </div>
+          </div>
+
+          <!-- Cantidad reintegros -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Cant. reintegros</label>
+            <input type="number" name="cant_reintegro_especial" class="form-control" value="0" min="0">
+          </div>
+
+          <!-- Incluir aleatorios -->
+          <div class="col-6 col-md-2 d-flex align-items-end">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     name="incluir_aleatorio" id="chkAleatorio" checked>
+              <label class="form-check-label" for="chkAleatorio">
+                Incluir aleatorios
+              </label>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-12 col-md-4">
+            <label class="form-label">Teléfono (opc.)</label>
+            <input type="text" name="telefono" class="form-control" placeholder="Opcional">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /BOLETOS -->
+
+
+    <!-- ─────────────────────────── PLANILLAS ─────────────────────────── -->
+    <div class="card mb-5 shadow-sm">
+      <div class="card-header bg-secondary text-white">
+        <i class="bi bi-journal-check me-2"></i>
+        <strong>Planillas</strong>
+      </div>
+      <div class="card-body">
+        <div class="row gy-3">
+
+          <!-- Serie de archivo planilla -->
+          <div class="col-12 col-md-4">
+            <label class="form-label">Serie de archivo</label>
+            <select name="serie_archivo_planilla" class="form-select" required>
+              <option value="">-- Seleccione serie --</option>
+              {% for f,label in series %}
+                <option value="{{ f }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Desde posición -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Desde posición</label>
+            <input type="number" name="planilla_inicio" class="form-control" value="1" min="1">
+          </div>
+
+          <!-- Hasta posición -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Hasta posición</label>
+            <input type="number" name="planilla_fin" class="form-control" value="40" min="1">
+          </div>
+
+          <!-- Fecha Planilla -->
+          <div class="col-6 col-md-2">
+            <label class="form-label">Fecha Planilla</label>
+            <input type="date" name="fecha_planilla" class="form-control" value="{{ fecha_hoy }}">
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- /PLANILLAS -->
+
+
+    <!-- ─────────────────────────── BOTONES ─────────────────────────── -->
+    <div class="d-flex gap-3 mb-5">
+      <button type="submit" name="form_type" value="zip"
+              class="btn btn-outline-primary flex-fill">
+        <i class="bi bi-file-zip-fill me-1"></i> Descargar ZIP
+      </button>
+      <button type="submit" name="form_type" value="boletos"
+              class="btn btn-success flex-fill">
+        <i class="bi bi-printer-fill me-1"></i> Imprimir Boletos
+      </button>
+      <button type="submit" name="form_type" value="planilla"
+              class="btn btn-warning text-white flex-fill">
+        <i class="bi bi-printer me-1"></i> Imprimir Planillas
+      </button>
+    </div>
+
+  </form>
+</div>
+
+{% block scripts %}
+<script>
+  // Previsualizar reintegro
+  const select = document.getElementById('selectReintegro');
+  const preview = document.getElementById('previewReintegro');
+  select.addEventListener('change', () => {
+    const img = select.value;
+    if (img) {
+      preview.src = "{{ url_for('reintegros_static', filename='') }}" + img;
+    } else {
+      preview.src = "";
+    }
+  });
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,68 @@
+<!-- templates/asignacion_planillas.html -->
+{% extends "layout.html" %}
+{% block title %}Asignación de Planillas | GLBINGO{% endblock %}
+{% block page_title %}Asignación de Planillas{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+
+  <!-- Formulario de asignación -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <form method="POST" action="{{ url_for('asignacion_planillas') }}">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block font-medium">Vendedor</label>
+          <select name="vendedor" required
+                  class="mt-1 block w-full border rounded px-3 py-2">
+            <option value="">-- Seleccione --</option>
+            {% for v in vendedores %}
+            <option value="{{ v.id }}">{{ v.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium">Desde</label>
+          <input type="number" name="inicio" min="1" required
+                 class="mt-1 block w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label class="block font-medium">Hasta</label>
+          <input type="number" name="fin" min="1" required
+                 class="mt-1 block w-full border rounded px-3 py-2" />
+        </div>
+        <div class="md:col-span-3">
+          <label class="block font-medium">Fecha Planilla</label>
+          <input type="date" name="fecha_planilla" value="{{ fecha_hoy }}" required
+                 class="mt-1 block w-full border rounded px-3 py-2" />
+        </div>
+      </div>
+      <div class="mt-4">
+        <button type="submit"
+                class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+          Asignar Planilla
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Listado de asignaciones existentes -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h2 class="text-lg font-semibold mb-4">Asignaciones existentes</h2>
+    {% if asignaciones %}
+      {% for vendedor, listas in asignaciones.items() %}
+      <div class="mb-4">
+        <h3 class="font-medium">{{ vendedor }}</h3>
+        <ul class="list-disc list-inside">
+          {% for a in listas %}
+          <li>{{ a.inicio }} – {{ a.fin }} &mdash; {{ a.fecha }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-gray-500">No hay asignaciones aún.</p>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

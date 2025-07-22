@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard | Crear Día de Sorteo | GLBINGO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Montserrat & Bootstrap Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900;700;600;500;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    :root {
+      --color-azul: #1976d2;
+      --color-azul-dark: #1554b0;
+      --color-sidebar: linear-gradient(140deg, #1965c7 0%, #51afff 100%);
+      --color-fondo: linear-gradient(120deg, #f3f7fc 0%, #dbefff 100%);
+      --color-amarillo: #ffd200;
+      --color-amarillo-b: #fff37a;
+      --trans-fast: .18s cubic-bezier(.77,0,.18,1);
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: var(--color-fondo);
+      min-height: 100vh;
+      display: flex;
+      animation: fadein 1.2s;
+    }
+    @keyframes fadein { from { opacity:0;} to{ opacity:1; } }
+    /* Sidebar */
+    .sidebar {
+      width: 245px;
+      background: var(--color-sidebar);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 2px 0 24px #1976d225;
+      position: relative;
+      z-index:2;
+      animation: sidebarIn .8s;
+    }
+    @keyframes sidebarIn { from {transform: translateX(-90px); opacity:0;} to {transform: none; opacity:1;} }
+    .sidebar-logo {
+      margin: 34px 0 14px 0;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 3px 17px #b0eaff70;
+      width: 97px; height: 97px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: box-shadow .27s;
+      animation: floatlogo 1.1s cubic-bezier(.36,1.2,.5,1);
+    }
+    .sidebar-logo img { width: 88px; height: auto; display:block; }
+    .sidebar-title {
+      font-weight: 900;
+      font-size: 1.36em;
+      letter-spacing: 1.5px;
+      text-align: center;
+      margin-bottom: 27px;
+      text-shadow: 0 2px 14px #60bfff22;
+      letter-spacing: 2.1px;
+    }
+    .sidebar-menu {
+      width: 91%;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      animation: fadein .9s .2s backwards;
+    }
+    .sidebar-link {
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.09em;
+      padding: 13px 25px 13px 18px;
+      border-radius: 13px;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 12px;
+      margin: 1px 0;
+      border: none; background: none;
+      transition: background var(--trans-fast), color var(--trans-fast), transform .13s;
+      cursor: pointer;
+      position: relative;
+    }
+    .sidebar-link.active,
+    .sidebar-link:hover {
+      background: #fff4c940;
+      color: var(--color-amarillo);
+      transform: translateX(7px) scale(1.05);
+      box-shadow: 0 2px 15px #fff8d440;
+    }
+    .sidebar-link .bi { font-size: 1.25em; }
+    /* Área principal */
+    .main-content {
+      flex: 1;
+      background: transparent;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadein .7s;
+    }
+    .main-content .fondo-logo {
+      position: fixed; right:0; left:250px; top:0; bottom:0; z-index:0;
+      display:flex; align-items:center; justify-content:center; pointer-events:none;
+      opacity:0.10;
+      filter: grayscale(23%) blur(1.5px) drop-shadow(0 6px 40px #1ea7f7);
+      animation: brandFadein 2s;
+    }
+    @keyframes floatlogo { 0%{transform:translateY(-25px) scale(.98);} 85%{transform:translateY(8px) scale(1.03);} 100%{transform:none;} }
+    @keyframes brandFadein { from { opacity:0; transform: scale(.90);} to { opacity:0.10; transform: none; } }
+    .main-content .fondo-logo img { width: 490px; max-width: 58vw;}
+    /* Caja de formulario */
+    .form-main {
+      position:relative; z-index:1;
+      max-width: 1000px;
+      margin: 38px auto 30px auto;
+      background: #fff;
+      border-radius: 30px;
+      box-shadow: 0 8px 56px #53c7ff25, 0 2px 9px #d7eafd1a;
+      padding: 37px 45px 30px 45px;
+      width: 91vw;
+      min-width: 320px;
+      animation: floatbox .9s cubic-bezier(.36,1.2,.5,1);
+      transition: box-shadow .2s;
+    }
+    @keyframes floatbox { from {opacity:0; transform:scale(.96) translateY(36px);} to{opacity:1; transform:none;} }
+    .form-logo {
+      display:flex; justify-content:center; align-items:center;
+      margin-bottom: 14px;
+      animation: fadein .9s;
+    }
+    .form-logo img { width: 82px; height: 82px; border-radius: 16px; background:#fff; box-shadow: 0 2px 15px #a6d9ff3d; object-fit:contain;}
+    .form-title {
+      text-align: center;
+      color: var(--color-azul);
+      font-size: 2.22em;
+      font-weight: 900;
+      margin: 0 0 22px 0;
+      letter-spacing: -1.1px;
+      display:flex; justify-content:center; align-items:center; gap:11px;
+      animation: fadein .8s;
+    }
+    .form-title .bi { color: var(--color-azul-dark); font-size: 1.17em; }
+    /* GRILLA CAMPOS */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 19px 16px;
+      margin-bottom: 24px;
+      animation: fadein .6s;
+    }
+    .campo-dia {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: fadein .7s;
+    }
+    .campo-dia label {
+      font-weight: 700;
+      font-size: 1.03em;
+      color: #1663c7;
+      margin-bottom: 5px;
+      letter-spacing: 0.09px;
+      margin-left: 2px;
+      user-select:none;
+    }
+    .campo-dia input, .campo-dia select, .campo-dia textarea {
+      width: 100%;
+      padding: 11px 13px 11px 35px;
+      border-radius: 10px;
+      border: 1.5px solid #c1defc;
+      font-family: inherit;
+      font-size: 1.03em;
+      background: #f7fafd;
+      outline: none;
+      transition: border .19s, box-shadow .18s;
+      box-shadow: 0 2px 8px #b0eaff13;
+      margin-bottom: 0;
+    }
+    .campo-dia input:focus, .campo-dia select:focus, .campo-dia textarea:focus {
+      border: 1.7px solid #1976d2; background: #fff;
+      box-shadow: 0 2px 19px #1976d239;
+    }
+    .input-icon {
+      position: absolute; left: 10px; top: 34px;
+      font-size: 1.11em; color: #b3ceef;
+      pointer-events: none;
+    }
+    /* ROW switches */
+    .switch-row {
+      display: flex; align-items: center; gap: 33px;
+      margin: 3px 0 23px 0;
+    }
+    .switch-label {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 1.09em; font-weight: 700;
+      color: #247bd9;
+      margin-right: 9px;
+    }
+    .switch-input {
+      width: 34px; height: 19px; accent-color: #19c37d; margin-right: 7px;
+    }
+    .estado-caja {
+      font-size: 1.01em; font-weight: 900; border-radius: 7px;
+      display: inline-block; padding: 5px 12px;
+      background: #ffe0e0; color: #ca2323; margin-left: 8px; letter-spacing: .2px;
+      box-shadow: 0 1px 6px #f7bebe33;
+      transition: background .15s, color .15s;
+      animation: fadein .9s;
+    }
+    .estado-caja.cerrada { background: #c6f7d4; color: #158635;}
+    .subseccion {
+      margin: 31px 0 12px 0;
+      font-size: 1.13em;
+      color: #1ea7f7;
+      font-weight: 900;
+      border-bottom: 2px solid #1ea7f733;
+      padding-bottom: 7px;
+      background: #f7fbff;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 2px 7px #d8edff18;
+      letter-spacing: 0.13px;
+      animation: fadein .7s;
+    }
+    /* -- FIGURAS AREA -- */
+    .figuras-area {
+      background: #f5f8fe;
+      border-radius: 13px;
+      padding: 20px 19px 12px 19px;
+      margin-top: 5px;
+      box-shadow: 0 2px 13px #bbdefb22;
+      border: 1.1px solid #e5f0fc;
+      margin-bottom: 11px;
+      width: 100%;
+      max-width: 690px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadein .8s;
+    }
+    .figuras-title {
+      font-size: 1.13em; font-weight: 900; color: #1ea7f7; margin-bottom: 10px; letter-spacing: .38px;
+    }
+    .figura-buscar-area {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 9px;
+    }
+    .figura-buscar-area input {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 7px;
+      border: 1.1px solid #d3eafd;
+      font-size: .99em;
+      background: #f7fafc;
+      outline: none;
+      transition: border 0.12s;
+    }
+    .figura-buscar-area input:focus { border: 1.4px solid #1ea7f7;}
+    .figura-buscar-area button {
+      background: #1ea7f7;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: 7px;
+      padding: 7px 17px;
+      font-size: .99em;
+      cursor: pointer;
+      transition: background .13s, transform .14s;
+      box-shadow: 0 2px 10px #96e0ff2d;
+    }
+    .figura-buscar-area button:hover { background: #155dbe; transform: scale(1.06);}
+    .crear-figura-link {
+      color: #1ea7f7; font-weight: 700; margin-left: 7px; cursor: pointer; text-decoration: underline;
+      transition: color 0.14s; font-size: .98em;
+    }
+    .crear-figura-link:hover { color: #0e539f;}
+    /* Tablero principal figura */
+    .figura-unica-seleccionada {
+      display: flex; flex-direction: column; align-items: center; margin-bottom: 6px;
+      border-radius: 9px; background: #fff; box-shadow: 0 2px 8px #e5eaff2d; padding: 9px 0 6px 0;
+      min-height: 100px;
+      margin-top: 0;
+      margin-bottom: 9px;
+      animation: fadein .7s;
+    }
+    .tablero-grande {
+      display: grid;
+      grid-template-columns: repeat(5, 24px);
+      grid-template-rows: repeat(5, 24px);
+      gap: 2px;
+      margin-bottom: 3px;
+      animation: fadein .7s;
+    }
+    .cuadro-grande {
+      width: 24px; height: 24px;
+      background: #e4ecfa;
+      border-radius: 4.3px;
+      border: 1.3px solid #b6c8e8;
+      transition: background 0.13s;
+      box-sizing: border-box;
+    }
+    .cuadro-grande.activo { background: #f64545; border-color: #ef2121;}
+    .cuadro-grande.centro { background: #fbd12e; border-color: #f2b406;}
+    .figura-nombre-grande {
+      font-weight: 800;
+      font-size: 1.06em;
+      color: #227be6;
+      margin-bottom: 2px;
+      letter-spacing: 0.3px;
+    }
+    .agregar-btn {
+      background: #19c37d;
+      color: #fff; font-weight: 800;
+      border: none; border-radius: 8px;
+      padding: 8px 22px; font-size: 1.01em; cursor: pointer;
+      margin-top: 5px; letter-spacing: .5px;
+      box-shadow: 0 1px 7px #1ea7f71b;
+      transition: background 0.11s, transform .12s;
+      margin-bottom: 9px;
+    }
+    .agregar-btn:hover { background: #0d944e; transform: scale(1.06);}
+    /* Figuras seleccionadas: lista */
+    .figuras-lista-title {
+      font-size: 1.04em; color: #1878d8; margin-bottom: 7px; font-weight: 700;
+      margin-top: 12px;
+      text-align: left;
+    }
+    .figuras-sorteo-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 100%;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .figura-sorteo-item {
+      display: flex; align-items: center; gap: 16px;
+      background: #f8fafd;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      font-size: 1.09em;
+      box-shadow: 0 2px 7px #abd8ff16;
+      animation: fadein .7s;
+      transition: box-shadow .17s;
+    }
+    .figura-sorteo-item span {
+      min-width: 65px; font-weight: 800; color: #1663c7; font-size: 1.06em;
+      letter-spacing: .3px;
+    }
+    .figura-sorteo-item label {
+      margin: 0 6px 0 4px; font-size: 0.97em; font-weight: 600; color: #666;
+    }
+    .figura-sorteo-item input.valor-figura {
+      width: 68px;
+      padding: 7px 10px;
+      font-size: 1.08em;
+      border: 1.1px solid #c7e1fa;
+      border-radius: 7px;
+      font-family: inherit;
+      font-weight: 700;
+      color: #0e399d;
+      background: #fff;
+      transition: border .15s;
+    }
+    .figura-sorteo-item input.valor-figura:focus {
+      border: 1.4px solid #1ea7f7;
+      background: #e7f7ff;
+    }
+    .figura-sorteo-item button {
+      border: none;
+      background: #e0eafd;
+      color: #2175d9;
+      padding: 5px 8px;
+      border-radius: 5px;
+      margin-left: 1px;
+      cursor: pointer;
+      font-size: 1.08em;
+      font-weight: 900;
+      transition: background 0.15s, color 0.15s, transform .12s;
+    }
+    .figura-sorteo-item button:hover:not(:disabled) {
+      background: #d6f0ff;
+      color: #1758c1;
+      transform: scale(1.13);
+    }
+    .figura-sorteo-item button:disabled {
+      background: #f6f6f6;
+      color: #b5bed3;
+      cursor: not-allowed;
+    }
+    .figura-sorteo-item .figura-del-btn {
+      background: #fa7878;
+      color: #fff;
+      font-size: 1.08em;
+      font-weight: 800;
+      padding: 5px 11px;
+      border-radius: 6px;
+      margin-left: 7px;
+      transition: background .16s;
+    }
+    .figura-sorteo-item .figura-del-btn:hover { background: #f44336; }
+    /* Botón guardar */
+    .btn-dia {
+      background: linear-gradient(90deg, var(--color-amarillo) 60%, var(--color-amarillo-b) 100%);
+      color: #1d2560; font-weight: 900; border: none; border-radius: 15px;
+      padding: 15px 48px; font-size: 1.17em; cursor: pointer;
+      box-shadow: 0 4px 19px #ffd20039;
+      margin: 30px auto 0 auto; display: block; transition: background 0.14s, transform .16s, color .16s;
+      letter-spacing: 1px;
+      animation: fadein .9s;
+    }
+    .btn-dia:hover {
+      background: linear-gradient(90deg, var(--color-amarillo-b) 20%, var(--color-amarillo) 90%);
+      box-shadow: 0 3px 24px #ffd20080;
+      color: #155dbe;
+      transform: scale(1.04);
+    }
+    @media (max-width: 1150px) {
+      .form-main { padding: 19px 1vw 11px 1vw; }
+    }
+    @media (max-width: 900px) {
+      .form-main { max-width: 99vw; }
+      .form-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 700px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-main { min-width: unset; padding: 10px 1vw; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <img src="{{ url_for('static', filename='logo-glstudios.png') }}" alt="Logo GL Studios">
+    </div>
+    <div class="sidebar-title">GLBINGO</div>
+    <div class="sidebar-menu">
+      <a class="sidebar-link active" href="#"><i class="bi bi-calendar-plus"></i> Crear sorteo</a>
+      <a class="sidebar-link" href="#"><i class="bi bi-bar-chart"></i> Dashboard</a>
+      <a class="sidebar-link" href="#"><i class="bi bi-file-earmark-text"></i> Historial</a>
+      <a class="sidebar-link" href="#"><i class="bi bi-person-badge"></i> Usuarios</a>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="fondo-logo">
+      <img src="{{ url_for('static', filename='logo-glstudios.png') }}" alt="GL Studios">
+    </div>
+    <div class="form-main">
+      <div class="form-logo">
+        <img src="{{ url_for('static', filename='logo-glstudios.png') }}" alt="Logo GL Studios">
+      </div>
+      <div class="form-title"><i class="bi bi-calendar-plus"></i> Crear Día de Sorteo</div>
+      <form autocomplete="off">
+        <!-- Grilla de campos principales -->
+        <div class="form-grid">
+          <div class="campo-dia">
+            <label for="fecha"><i class="bi bi-calendar-event input-icon"></i> Fecha del sorteo</label>
+            <input type="date" id="fecha" required>
+          </div>
+          <div class="campo-dia">
+            <label for="identificador"><i class="bi bi-ticket input-icon"></i> Identificador del evento</label>
+            <input type="text" id="identificador" maxlength="8" required placeholder="Ej: AC, VC...">
+          </div>
+          <div class="campo-dia">
+            <label for="cantidad-boletos"><i class="bi bi-hash input-icon"></i> Cantidad de boletos</label>
+            <input type="number" id="cantidad-boletos" required min="1" max="30000">
+          </div>
+          <div class="campo-dia">
+            <label for="valor-premios"><i class="bi bi-cash-coin input-icon"></i> Valor total en premios</label>
+            <input type="number" id="valor-premios" min="1" step="0.01" required placeholder="$">
+          </div>
+          <div class="campo-dia">
+            <label for="valor-boleto"><i class="bi bi-coin input-icon"></i> Valor del boleto</label>
+            <input type="number" id="valor-boleto" min="0.1" step="0.01" required placeholder="$">
+          </div>
+          <div class="campo-dia">
+            <label for="serie-impresion"><i class="bi bi-stack input-icon"></i> Serie de impresión</label>
+            <input type="text" id="serie-impresion" maxlength="12" required>
+          </div>
+          <div class="campo-dia">
+            <label for="plantilla-max"><i class="bi bi-diagram-3 input-icon"></i> Plantilla (máx. boletos)</label>
+            <input type="number" id="plantilla-max" required min="1000" max="50000" value="15000">
+          </div>
+          <div class="campo-dia">
+            <label for="premio-gordo"><i class="bi bi-trophy input-icon"></i> Premio gordo</label>
+            <input type="number" id="premio-gordo" min="1" step="0.01" required placeholder="$">
+          </div>
+        </div>
+        <div class="switch-row">
+          <span class="switch-label">
+            <input type="checkbox" class="switch-input" id="solo-vendidos">
+            Jugar solo boletos vendidos
+          </span>
+          <span class="switch-label">
+            <input type="checkbox" class="switch-input" id="caja-cerrada">
+            Caja cerrada
+            <span id="estado-caja" class="estado-caja">Abierta</span>
+          </span>
+        </div>
+        <div class="subseccion"><i class="bi bi-grid-3x3-gap"></i> Configuración de Tabla Llena</div>
+        <div class="form-grid">
+          <div class="campo-dia">
+            <label for="boleto-tllena1"><i class="bi bi-file-earmark-bar-graph input-icon"></i> Boleto para tabla llena #1</label>
+            <input type="text" id="boleto-tllena1" maxlength="20" required placeholder="Código de boleto">
+          </div>
+          <div class="campo-dia">
+            <label for="boleto-tllena2"><i class="bi bi-file-earmark-bar-graph input-icon"></i> Boleto tabla llena #2</label>
+            <input type="text" id="boleto-tllena2" maxlength="20" placeholder="Opcional">
+          </div>
+          <div class="campo-dia">
+            <label for="boleto-tllena3"><i class="bi bi-file-earmark-bar-graph input-icon"></i> Boleto tabla llena #3</label>
+            <input type="text" id="boleto-tllena3" maxlength="20" placeholder="Opcional">
+          </div>
+          <div class="campo-dia" style="grid-column: 1/5;">
+            <label for="restriccion-tllena"><i class="bi bi-shield-check input-icon"></i> Restricciones tabla llena</label>
+            <textarea id="restriccion-tllena" rows="2" placeholder="Ej: 1ra tabla después de 45 balotas, mínimo 5 números por línea..."></textarea>
+          </div>
+        </div>
+        <div class="subseccion"><i class="bi bi-stars"></i> Comodín</div>
+        <div class="form-grid">
+          <div class="campo-dia">
+            <label for="nombre-comodin"><i class="bi bi-award input-icon"></i> Nombre o símbolo del comodín</label>
+            <input type="text" id="nombre-comodin" maxlength="18" placeholder="Ej: Aguacate" required>
+          </div>
+          <div class="campo-dia">
+            <label for="cantidad-comodines"><i class="bi bi-123 input-icon"></i> Cantidad de comodines</label>
+            <input type="number" id="cantidad-comodines" min="0" max="100" value="0">
+          </div>
+          <div class="campo-dia">
+            <label for="boletos-por-planilla"><i class="bi bi-list-ol input-icon"></i> Boletos por planilla</label>
+            <input type="number" id="boletos-por-planilla" min="1" max="50" value="20" required>
+          </div>
+        </div>
+        <!-- FIGURAS VISUALES -->
+        <div class="subseccion"><i class="bi bi-shapes"></i> Figuras del sorteo</div>
+        <div class="figuras-area">
+          <div class="figuras-title">Figuras del sorteo</div>
+          <div class="figura-buscar-area">
+            <input type="text" id="buscar-figura" placeholder="Buscar figura (L, X, Estrella...)" autocomplete="off">
+            <button type="button" id="btnBuscarFigura">Buscar</button>
+            <a class="crear-figura-link" href="#">+ Crear nueva figura</a>
+          </div>
+          <!-- Figura visual principal -->
+          <div id="figuraEncontrada" style="min-height:120px;"></div>
+          <!-- Botón agregar figura -->
+          <button type="button" class="agregar-btn" id="btnAgregarFigura" style="display:none;">Agregar figura al sorteo</button>
+          <div class="figuras-lista-title">Figuras seleccionadas para el sorteo:</div>
+          <!-- LISTA MEJORADA -->
+          <ul class="figuras-sorteo-list" id="figurasSorteoList"></ul>
+        </div>
+        <button class="btn-dia" type="submit"><i class="bi bi-save2"></i> Guardar Día de Sorteo</button>
+      </form>
+    </div>
+  </div>
+  <!-- JS FIGURAS -->
+  <script>
+    const FIGURAS = [
+      { nombre: "L", matriz: [[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0],[1,0,0,0,0],[1,1,1,1,1]] },
+      { nombre: "X", matriz: [[1,0,0,0,1],[0,1,0,1,0],[0,0,1,0,0],[0,1,0,1,0],[1,0,0,0,1]] },
+      { nombre: "Estrella", matriz: [[1,0,1,0,1],[0,1,1,1,0],[1,1,1,1,1],[0,1,1,1,0],[1,0,1,0,1]] },
+    ];
+    let figurasSorteo = [];
+    let figuraBuscada = null;
+
+    function renderTablero(matriz) {
+      const grid = document.createElement('div');
+      grid.className = 'tablero-grande';
+      for (let f=0; f<5; f++) for (let c=0; c<5; c++) {
+        const cuad = document.createElement('div');
+        cuad.className = 'cuadro-grande';
+        if (matriz[f][c]) cuad.classList.add('activo');
+        if (f===2 && c===2) cuad.classList.add('centro');
+        grid.appendChild(cuad);
+      }
+      return grid;
+    }
+
+    function mostrarFiguraEncontrada(figura) {
+      const cont = document.getElementById('figuraEncontrada');
+      cont.innerHTML = '';
+      if (!figura) {
+        document.getElementById('btnAgregarFigura').style.display = "none";
+        return;
+      }
+      const div = document.createElement('div');
+      div.className = "figura-unica-seleccionada";
+      div.appendChild(renderTablero(figura.matriz));
+      const nombre = document.createElement('div');
+      nombre.className = "figura-nombre-grande";
+      nombre.textContent = figura.nombre;
+      div.appendChild(nombre);
+      cont.appendChild(div);
+      document.getElementById('btnAgregarFigura').style.display = "";
+    }
+
+    function buscarFiguraPorNombre(nombre) {
+      const nombreMin = nombre.trim().toLowerCase();
+      return FIGURAS.find(f =>
+        f.nombre.toLowerCase() === nombreMin ||
+        f.nombre.toLowerCase().startsWith(nombreMin)
+      );
+    }
+
+    function renderFigurasSorteoList() {
+      const list = document.getElementById('figurasSorteoList');
+      list.innerHTML = "";
+      figurasSorteo.forEach((fig, i) => {
+        const li = document.createElement('li');
+        li.className = "figura-sorteo-item";
+        li.innerHTML = `
+          <span>${i+1}.</span>
+          <b>${fig.nombre}</b>
+          <label>Valor:</label>
+          <input class="valor-figura" type="number" value="${fig.valor||''}" min="1" style="margin-right:3px;" onchange="actualizarValorFigura(${i}, this.value)">
+          <button title="Subir" onclick="moverFigura(${i},-1)" ${i===0?'disabled':''}>&uarr;</button>
+          <button title="Bajar" onclick="moverFigura(${i},1)" ${i===figurasSorteo.length-1?'disabled':''}>&darr;</button>
+          <button class="figura-del-btn" title="Eliminar" onclick="eliminarFigura(${i})">&times;</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+    window.actualizarValorFigura = function(idx, valor) {
+      figurasSorteo[idx].valor = Number(valor) || '';
+    }
+    window.moverFigura = function(idx, dir) {
+      const nuevo = idx + dir;
+      if (nuevo<0 || nuevo>=figurasSorteo.length) return;
+      [figurasSorteo[idx], figurasSorteo[nuevo]] = [figurasSorteo[nuevo], figurasSorteo[idx]];
+      renderFigurasSorteoList();
+    }
+    window.eliminarFigura = function(idx) {
+      figurasSorteo.splice(idx,1);
+      renderFigurasSorteoList();
+    }
+
+    document.getElementById('btnBuscarFigura').onclick = ()=>{
+      const nombre = document.getElementById('buscar-figura').value;
+      figuraBuscada = buscarFiguraPorNombre(nombre);
+      mostrarFiguraEncontrada(figuraBuscada);
+    }
+    document.getElementById('btnAgregarFigura').onclick = ()=>{
+      if (!figuraBuscada) return;
+      if (figurasSorteo.some(f=>f.nombre===figuraBuscada.nombre)) return;
+      figurasSorteo.push({...figuraBuscada, valor: ''});
+      renderFigurasSorteoList();
+    }
+    document.getElementById('buscar-figura').addEventListener('keyup', function(e){
+      if (e.key==="Enter") document.getElementById('btnBuscarFigura').click();
+    });
+
+    // INICIO VISUAL
+    renderFigurasSorteoList();
+    document.getElementById('buscar-figura').value = "L";
+    document.getElementById('btnBuscarFigura').click();
+  </script>
+</body>
+</html>

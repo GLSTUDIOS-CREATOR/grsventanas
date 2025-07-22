@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Usuarios | GL Studios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts + Bootstrap Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;700;600;400&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body { background: linear-gradient(120deg, #e0eaff 0%, #eaf6ff 100%); font-family: 'Montserrat', Arial, sans-serif; margin: 0; min-height: 100vh; }
+    .center-form { display: flex; flex-direction: column; align-items: center; padding: 34px 0; }
+    .volver-dashboard { background: #fff; color: #1876e4; font-weight: 800; font-size: 1.13em; padding: 10px 32px; border-radius: 14px; border: 2px solid #2478ff2a; box-shadow: 0 2px 10px #267dff1c; text-decoration: none; margin-bottom: 22px; transition: background .15s, color .14s, border .14s; }
+    .volver-dashboard:hover { background: #2478ff12; color: #267dff; border-color: #267dff5b; }
+    .logo-top { width: 135px; margin-bottom: 28px; filter: drop-shadow(0 6px 18px #99bcf888); background: #fff; padding: 8px; border-radius: 18px; box-shadow: 0 0 13px #1ea7f711; }
+    .control-panel { max-width: 800px; width: 90%; margin-bottom: 20px; display: flex; justify-content: flex-end; }
+    .btn-nuevo { background: #28a745; color: #fff; font-weight: 700; border: none; border-radius: 8px; padding: 10px 20px; font-size: 1em; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background .2s; }
+    .btn-nuevo:hover { background: #218838; }
+    .form-box { background: #fff; border-radius: 22px; box-shadow: 0 7px 32px #1ea7f72e; padding: 34px 28px 22px; max-width: 480px; width: 90%; margin-bottom: 34px; display: none; }
+    .form-title { font-size: 2.1em; font-weight: 800; color: #1366d6; text-align: center; margin-bottom: 28px; }
+    label { font-weight: 700; color: #1679db; margin-bottom: 5px; display: block; font-size: 1.05em; }
+    .form-control, .form-select { width: 100%; border-radius: 11px; border: 1.7px solid #e1e9f3; font-size: 1.04em; padding: 10px 13px; margin-bottom: 17px; background: #f6faff; transition: border-color .17s; }
+    .form-control:focus, .form-select:focus { outline: none; border-color: #267dff; background: #f9fbff; }
+    .input-group { position: relative; display: flex; align-items: center; }
+    .input-group .toggle-pass { position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.3em; color: #267dff; padding: 0; transition: background .12s; }
+    .input-group .toggle-pass:hover { background: #e9f3ff; }
+    .permiso-group { background: #f6faff; border-radius: 13px; padding: 18px 13px 8px; margin-bottom: 21px; border: 1.4px solid #e4ecf8; }
+    .permiso-title { font-size: 1.05em; font-weight: 700; color: #1978d7; margin-bottom: 11px; }
+    .permiso-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .permiso-item { flex: 0 0 50%; display: flex; align-items: center; }
+    .permiso-list input[type="checkbox"] { accent-color: #267dff; margin-right: 8px; width: 1.1em; height: 1.1em; }
+    .permiso-list label { font-weight: 600; cursor: pointer; }
+    .form-actions { text-align: right; margin-top: 14px; }
+    .btn-main { background: linear-gradient(90deg,#267dff 0%,#3ba6ff 100%); color: #fff; font-weight: 800; border: none; border-radius: 11px; padding: 10px 30px; box-shadow: 0 3px 11px #267dff1c; cursor: pointer; transition: background .14s; }
+    .btn-main:hover { background: linear-gradient(90deg,#3ba6ff 0%,#267dff 100%); }
+    .btn-cancel { background: #eaeaea; color: #32507b; font-weight: 700; border: none; border-radius: 11px; padding: 10px 24px; cursor: pointer; transition: background .14s; }
+    .btn-cancel:hover { background: #e0eaff; }
+    .list-box { background: #fff; border-radius: 22px; box-shadow: 0 7px 32px #1ea7f72e; padding: 22px; max-width: 800px; width: 90%; margin: 0 auto 34px; }
+    .list-box .form-title { font-size: 1.8em; margin-bottom: 18px; color: #1366d6; text-align: left; }
+    .table-users { width: 100%; border-collapse: collapse; }
+    .table-users th, .table-users td { padding: 10px; text-align: left; border-bottom: 1px solid #e4ecf8; }
+    .table-users th { font-weight: 700; color: #1679db; }
+    .table-users img { width: 32px; height: 32px; border-radius: 50%; }
+    .table-users .actions button { margin-right: 6px; }
+    @media (max-width: 600px) { .form-box { padding: 22px 6vw; } .form-title { font-size: 1.6em; } .permiso-item { flex: 0 0 100%; } }
+  </style>
+</head>
+<body>
+  <div class="center-form">
+    <a href="{{ url_for('dashboard') }}" class="volver-dashboard">&larr; Volver al Dashboard</a>
+    <img src="{{ url_for('static', filename='logo-glstudios.png') }}" alt="GL Studios" class="logo-top">
+
+    <div class="control-panel">
+      <button class="btn-nuevo" id="btnNuevo"><i class="bi bi-person-plus"></i> Agregar Usuario</button>
+    </div>
+
+    <div class="form-box" id="formBox">
+      <div class="form-title" id="formTitle">Crear Usuario</div>
+      <form id="userForm">
+        <input type="hidden" id="usuario_original" value="">
+
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" class="form-control" maxlength="32" required>
+
+        <label for="clave">Clave:</label>
+        <div class="input-group">
+          <input type="password" id="clave" class="form-control" maxlength="40" autocomplete="new-password">
+          <button type="button" class="toggle-pass" id="togglePassword"><i class="bi bi-eye" id="iconEye"></i><i class="bi bi-eye-slash" id="iconEyeSlash" style="display:none"></i></button>
+        </div>
+
+        <label for="rol">Rol:</label>
+        <select id="rol" class="form-select" required>
+          <option value="">Seleccione un rol</option>
+          <option value="superadmin">Superadmin</option>
+          <option value="admin">Administrador</option>
+          <option value="operador">Operador</option>
+        </select>
+
+        <label for="sexo">Sexo:</label>
+        <select id="sexo" class="form-select" required>
+          <option value="masculino">Masculino</option>
+          <option value="femenino">Femenino</option>
+        </select>
+
+        <label for="avatar">Avatar:</label>
+        <select id="avatar" class="form-select" required>
+          <option value="avatar-male.png">Masculino</option>
+          <option value="avatar-female.png">Femenino</option>
+        </select>
+
+        <div class="permiso-group">
+          <div class="permiso-title">Permisos</div>
+          <div class="permiso-list">
+            <div class="permiso-item"><input type="checkbox" value="juego"> <label>Juego</label></div>
+            <div class="permiso-item"><input type="checkbox" value="sorteos"> <label>Sorteos</label></div>
+            <div class="permiso-item"><input type="checkbox" value="contabilidad"> <label>Contabilidad</label></div>
+            <div class="permiso-item"><input type="checkbox" value="vendedores"> <label>Vendedores</label></div>
+            <div class="permiso-item"><input type="checkbox" value="admin_usuarios"> <label>Gestion Usuarios</label></div>
+            <div class="permiso-item"><input type="checkbox" value="vmix"> <label>Config vMix</label></div>
+            <div class="permiso-item"><input type="checkbox" value="graficos"> <label>Gráficos</label></div>
+            <div class="permiso-item"><input type="checkbox" value="movimientos"> <label>Movimientos</label></div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-main"><i class="bi bi-save"></i> Guardar</button>
+          <button type="button" class="btn-cancel" id="btnCancelar">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="list-box">
+      <div class="form-title">Usuarios Registrados</div>
+      <table class="table-users">
+        <thead><tr><th>Usuario</th><th>Rol</th><th>Permisos</th><th>Sexo</th><th>Avatar</th><th>Acciones</th></tr></thead>
+        <tbody>
+          {% for nombre, datos in usuarios.items() %}
+          <tr data-usuario="{{ nombre }}">
+            <td>{{ nombre }}</td><td>{{ datos.rol }}</td><td>{{ datos.permisos|join(', ') }}</td><td>{{ datos.sexo }}</td>
+            <td><img src="{{ url_for('static', filename=datos.avatar) }}"></td>
+            <td class="actions"><button class="btn btn-sm btn-primary btn-edit"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-danger btn-delete"><i class="bi bi-trash"></i></button></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const formBox = document.getElementById('formBox'), btnNuevo = document.getElementById('btnNuevo'), btnCancelar = document.getElementById('btnCancelar');
+    btnNuevo.onclick = () => { document.getElementById('formTitle').textContent = 'Crear Usuario'; document.getElementById('usuario_original').value = ''; document.getElementById('userForm').reset(); formBox.style.display = 'block'; };
+    btnCancelar.onclick = () => formBox.style.display = 'none';
+    const pwdInput = document.getElementById('clave'), toggle = document.getElementById('togglePassword'), eye = document.getElementById('iconEye'), eyeSlash = document.getElementById('iconEyeSlash');
+    toggle.onclick = () => { if (pwdInput.type === 'password') { pwdInput.type = 'text'; eye.style.display = 'none'; eyeSlash.style.display = 'inline'; } else { pwdInput.type = 'password'; eye.style.display = 'inline'; eyeSlash.style.display = 'none'; } };
+    document.querySelectorAll('.btn-edit').forEach(btn => btn.onclick = () => { const u = btn.closest('tr').dataset.usuario; fetch(`/api/usuario/${u}`).then(r=>r.json()).then(d=>{ if (!d.ok) return alert(d.msg); document.getElementById('formTitle').textContent = 'Editar Usuario'; document.getElementById('usuario_original').value = d.usuario; document.getElementById('usuario').value = d.usuario; document.getElementById('rol').value = d.rol; document.getElementById('sexo').value = d.sexo; document.getElementById('avatar').value = d.avatar; document.querySelectorAll('.permiso-list input').forEach(ch=> ch.checked = d.permisos.includes(ch.value)); formBox.style.display = 'block'; }); });
+    document.querySelectorAll('.btn-delete').forEach(btn => btn.onclick = () => { const u = btn.closest('tr').dataset.usuario; if (confirm(`Eliminar usuario "${u}"?`)) { fetch(`/api/usuario/${u}`,{method:'DELETE'}).then(r=>r.json()).then(res=> res.ok ? location.reload(): alert(res.msg)); } });
+    document.getElementById('userForm').onsubmit = e => { e.preventDefault(); const u = document.getElementById('usuario').value.trim().toUpperCase(), orig = document.getElementById('usuario_original').value, payload = { usuario: u, clave: document.getElementById('clave').value, rol: document.getElementById('rol').value, sexo: document.getElementById('sexo').value, avatar: document.getElementById('avatar').value, permisos: Array.from(document.querySelectorAll('.permiso-list input:checked')).map(ch=>ch.value) }, url = orig ? '{{ url_for("api_editar_usuario") }}' : '{{ url_for("api_crear_usuario") }}'; fetch(url,{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).then(r=>r.json()).then(res=> res.ok ? location.reload() : alert(res.msg)); };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

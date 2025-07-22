@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Últimos Movimientos | GLBINGO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900;700;600;500;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            background: #eaf3ff;
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0; min-height: 100vh;
+        }
+        .fondo-gl {
+            position: fixed; z-index:0; left:0; top:0; width:100vw; height:100vh;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .fondo-gl img { opacity:0.04; width:550px; min-width:200px; filter: grayscale(40%);}
+        .main-mov {
+            max-width: 670px; margin: 52px auto 0 auto; padding: 24px 0;
+            background: #fff; border-radius: 22px; box-shadow: 0 9px 50px #7abfff33;
+            text-align: center; position: relative;
+        }
+        .logo-gl {
+            width: 75px; margin-bottom: 18px; border-radius: 14px;
+            box-shadow: 0 3px 12px #1ea7f71a;
+        }
+        .volver-btn {
+            display: inline-block;
+            margin-bottom: 22px;
+            background: none; color: #2176e6; border: 2px solid #2176e6;
+            border-radius: 10px; padding: 9px 22px; font-weight: 700;
+            font-size: 1em; cursor: pointer; transition:.14s;
+            text-decoration: none;
+        }
+        .volver-btn:hover { background:#1ea7f715; }
+        h2 { color:#1976d2; font-size:2.1em; font-weight:900; margin:0 0 15px 0; }
+        table {
+            width:100%; border-radius:18px; overflow:hidden;
+            background:#f8fbff; margin: 0 auto;
+            border-spacing: 0; border-collapse: separate;
+        }
+        th, td { padding: 11px 7px; }
+        th {
+            background: #eaf2fd; color: #227ae6; font-weight:800;
+            font-size:1.09em;
+        }
+        tr { transition: background 0.1s;}
+        tr:not(:last-child) td { border-bottom: 1.2px solid #e3ebfa; }
+        td { color:#16458b; font-weight: 600; text-align: center; font-size:1em;}
+        .avatar-mov { width:35px; height:35px; border-radius:50%; vertical-align: middle; margin-right:6px; border:2px solid #1ea7f7;}
+        .bandera { width:28px; vertical-align: middle;}
+        .vacio { color:#b2b9c7; text-align:center; font-size:1.07em; font-weight:600; padding:16px;}
+        @media (max-width:600px){
+            .main-mov { max-width:99vw; margin:14px 0;}
+            th, td { font-size:.98em; padding:8px 2px;}
+            .logo-gl { width:55px;}
+        }
+    </style>
+</head>
+<body>
+<div class="fondo-gl">
+    <img src="{{ url_for('static', filename='logo-glstudios.png') }}">
+</div>
+<div class="main-mov">
+    <img src="{{ url_for('static', filename='logo-glstudios.png') }}" class="logo-gl">
+    <a class="volver-btn" href="{{ url_for('dashboard') }}"><i class="bi bi-arrow-left"></i> Volver al Dashboard</a>
+    <h2>Últimos Movimientos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Usuario</th>
+                <th>Rol</th>
+                <th>IP</th>
+                <th>País</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if movimientos|length == 0 %}
+            <tr><td colspan="6" class="vacio">Sin movimientos registrados.</td></tr>
+            {% endif %}
+            {% for mov in movimientos %}
+            <tr>
+                <td>{{ mov.fecha }}</td>
+                <td>
+                  <img src="{{ url_for('static', filename=mov.avatar) }}" class="avatar-mov">
+                  {{ mov.usuario|capitalize }}
+                </td>
+                <td>{{ mov.rol|capitalize }}</td>
+                <td>{{ mov.ip }}</td>
+                <td>
+                    {% if mov.bandera %}
+                      <img src="{{ mov.bandera }}" class="bandera" alt="{{ mov.pais }}">
+                    {% endif %}
+                    {{ mov.pais }}
+                </td>
+                <td>{{ mov.accion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

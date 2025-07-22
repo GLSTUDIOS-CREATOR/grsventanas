@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+
+{% block title %}Dashboard | GLBINGO{% endblock %}
+
+{% block head %}
+  <!-- Inyectamos Chart.js solo en esta página -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+
+  <!-- Card: Boletos vendidos -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-ticket-perforated-fill fs-1 text-primary me-3"></i>
+        <div>
+          <h6 class="card-subtitle mb-1 text-muted">Boletos vendidos</h6>
+          <h4 class="card-title">{{ boletos_vendidos }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card: Boletos devueltos -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-arrow-counterclockwise fs-1 text-warning me-3"></i>
+        <div>
+          <h6 class="card-subtitle mb-1 text-muted">Boletos devueltos</h6>
+          <h4 class="card-title">{{ boletos_devueltos }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card: Ganancia empresa -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-bank fs-1 text-success me-3"></i>
+        <div>
+          <h6 class="card-subtitle mb-1 text-muted">Ganancia empresa</h6>
+          <h4 class="card-title">${{ ganancia_empresa }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card: Ahorro en caja -->
+  <div class="col-12 col-md-6 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-body d-flex align-items-center">
+        <i class="bi bi-folder fs-1 text-purple me-3"></i>
+        <div>
+          <h6 class="card-subtitle mb-1 text-muted">Ahorro en caja</h6>
+          <h4 class="card-title">${{ ahorro }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Gráfica de resumen mensual -->
+<div class="card shadow-sm mt-4">
+  <div class="card-header">
+    <h5 class="mb-0">Resumen mensual</h5>
+  </div>
+  <div class="card-body">
+    <canvas id="resumenChart" height="100"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Configuramos la gráfica
+  const ctx = document.getElementById('resumenChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ resumen_mensual.keys()|list }},
+      datasets: [{
+        label: 'Valores',
+        data: {{ resumen_mensual.values()|list }},
+        backgroundColor: [
+          'rgba(13,110,253,0.7)',   // azul
+          'rgba(255,193,7,0.7)',    // amarillo
+          'rgba(25,135,84,0.7)',    // verde
+          'rgba(220,53,69,0.7)',    // rojo
+          'rgba(112,66,193,0.7)'    // púrpura
+        ]
+      }]
+    },
+    options: {
+      scales: { 
+        y: { beginAtZero: true }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+</script>
+{% endblock %}
