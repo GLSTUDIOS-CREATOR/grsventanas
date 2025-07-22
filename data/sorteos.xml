@@ -1,0 +1,38 @@
+<sorteos>
+  <sorteo id="1">
+    <fecha>2025-06-13</fecha>
+    <identificador>AC2025</identificador>
+    <cantidad_boletos>5000</cantidad_boletos>
+    <valor_premios>3000</valor_premios>
+    <valor_boleto>1</valor_boleto>
+    <serie_impresion>GL-01</serie_impresion>
+    <plantilla_max>15000</plantilla_max>
+    <premio_gordo>1500</premio_gordo>
+    <solo_vendidos>True</solo_vendidos>
+    <caja_cerrada>False</caja_cerrada>
+    <tabla_llena>
+      <boleto1>ABC123</boleto1>
+      <boleto2>DEF456</boleto2>
+      <boleto3></boleto3>
+      <restriccion>Ejemplo de restricción</restriccion>
+    </tabla_llena>
+    <comodin>
+      <nombre>Aguacate</nombre>
+      <cantidad>2</cantidad>
+      <boletos_por_planilla>20</boletos_por_planilla>
+    </comodin>
+    <figuras>
+      <figura>
+        <nombre>L</nombre>
+        <valor>100</valor>
+      </figura>
+      <figura>
+        <nombre>X</nombre>
+        <valor>150</valor>
+      </figura>
+      <!-- Más figuras... -->
+    </figuras>
+    <estado>futuro</estado> <!-- puede ser pasado, presente o futuro -->
+  </sorteo>
+  <!-- Más sorteos... -->
+</sorteos>
